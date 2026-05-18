@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/home.dart';
-import 'package:flutter_application_3/media.dart';
-import 'package:flutter_application_3/profile.dart';
 
 
 class ColumnPage extends StatefulWidget {
@@ -15,9 +12,9 @@ class _ColumnPageState extends State<ColumnPage> {
   int currentIndex = 0;   //on which page are we
 
  final List<Widget> pages = [
-     const HomePage(),
-  const MediaPage(),
-  const ProfilePage(),  //nak panggil daripada file lain
+      /*const HomePage(),
+      const MediaPage(),
+      const ProfilePage(), */ //nak panggil daripada file lain
   ];
 
 /*Container(
@@ -69,7 +66,7 @@ class _ColumnPageState extends State<ColumnPage> {
               },
             ),
 
-            ListTile(
+            /*ListTile(
               leading: const Icon(Icons.perm_media_outlined),
               title: const Text('media'),
               onTap: () {
@@ -79,7 +76,7 @@ class _ColumnPageState extends State<ColumnPage> {
                   )
                 );
               },
-            ),
+            ),*/
 
             ListTile(
               leading: const Icon(Icons.person),
