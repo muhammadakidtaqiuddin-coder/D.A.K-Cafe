@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'menu.dart';
+import 'login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           seedColor: const Color(0xFF1E2A78),
         ),
       ),
-      home: const MenuPage(),
+      home: const LoginPage(),
     );
   }
 }
