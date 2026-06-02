@@ -1,114 +1,62 @@
 import 'package:flutter/material.dart';
-
+import 'package:dak_cafe/home.dart';
+import 'package:dak_cafe/menu.dart';
+import 'package:dak_cafe/media.dart';
+import 'package:dak_cafe/profile.dart';
+import 'package:dak_cafe/form_page.dart';
 
 class ColumnPage extends StatefulWidget {
   const ColumnPage({super.key});
 
   @override
-  State<ColumnPage> createState() => _ColumnPageState();             //stateful 
+  State<ColumnPage> createState() => _ColumnPageState();
 }
 
 class _ColumnPageState extends State<ColumnPage> {
-  int currentIndex = 0;   //on which page are we
+  int currentIndex = 0;
 
- final List<Widget> pages = [
-      /*const HomePage(),
-      const MediaPage(),
-      const ProfilePage(), */ //nak panggil daripada file lain
+  final List<Widget> pages = const [
+    HomePage(),
+    MenuPage(),
+    MediaPage(),
+    FormPage(),
+    ProfilePage(),
   ];
-
-/*Container(
-      color: Colors.cyanAccent,
-      child: const Center(
-        child: Text("Welcome"),
-      ),
-    ),
-    Container(
-      color: Colors.amberAccent,
-      child: const Center(
-        child: Text("Media Page"),
-      ),
-    ),
-    Container(
-      color: Colors.lightGreenAccent,
-      child: const Center(
-        child: Text("Profile Page"),
-      ),
-    ), */
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bottom Navigation'),
-        centerTitle: true,
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.redAccent,
-              ),
-              child: Center(
-                child: Text(
-                  'Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-
-            /*ListTile(
-              leading: const Icon(Icons.perm_media_outlined),
-              title: const Text('media'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MediaPage(),
-                  )
-                );
-              },
-            ),*/
-
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('profile'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-
-          ],
-        ),
-      ),
-      body: pages[currentIndex],    //based on index
+      body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,     //which page
-        onTap: (index) {      //return number
-          setState(() {         //ui update when data change
+        currentIndex: currentIndex,
+        selectedItemColor: const Color(0xFF1E2A78),
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          setState(() {
             currentIndex = index;
           });
         },
-        items: const [        //button
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.image),
-            label: 'Media',
+            icon: Icon(Icons.menu_book_outlined),
+            label: 'Menu',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.card_giftcard_outlined),
+            label: 'Gift Card',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.workspace_premium_outlined),
+            label: 'Rewards',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Account',
           ),
         ],
       ),
