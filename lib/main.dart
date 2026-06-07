@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:dak_cafe/db_helper.dart';
 import 'login.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper.database; // initialise & seed DB on first run
   runApp(const MyApp());
 }
 

@@ -2,17 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:dak_cafe/login.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final Map<String, dynamic> user;
+  const ProfilePage({super.key, required this.user});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String _name = 'Admin';
-  String _email = 'admin@dakcoffee.com';
+  late String _name;
+  late String _email;
   bool _notificationsEnabled = true;
   String _selectedLanguage = 'English';
+
+  @override
+  void initState() {
+    super.initState();
+    _name = (widget.user['name'] as String?)?.isNotEmpty == true
+        ? widget.user['name'] as String
+        : widget.user['username'] as String;
+    _email = (widget.user['email'] as String?)?.isNotEmpty == true
+        ? widget.user['email'] as String
+        : '';
+  }
 
   void _showEditProfileDialog() {
     final nameCtrl = TextEditingController(text: _name);
@@ -320,7 +332,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: const Text('Notifications', style: TextStyle(fontWeight: FontWeight.w500)),
                   trailing: Switch(
                     value: _notificationsEnabled,
-                    activeColor: const Color(0xFF1E2A78),
+                    activeThumbColor: const Color(0xFF1E2A78),
                     onChanged: (val) {
                       setState(() => _notificationsEnabled = val);
                       ScaffoldMessenger.of(context).showSnackBar(

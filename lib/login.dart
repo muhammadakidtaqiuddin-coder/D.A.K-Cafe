@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:dak_cafe/db_helper.dart';
 import 'package:dak_cafe/column.dart';
+import 'package:dak_cafe/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,18 +13,31 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  void checkLogin() {
-    if (usernameController.text == "admin" &&
-        passwordController.text == "1234") {
+  Future<void> checkLogin() async {
+    setState(() => _isLoading = true);
+
+    final user = await DBHelper.getUser(
+      usernameController.text.trim(),
+      passwordController.text.trim(),
+    );
+
+    setState(() => _isLoading = false);
+
+    if (user != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const ColumnPage(),
-        ),
+        MaterialPageRoute(builder: (context) => ColumnPage(user: user)),
       );
     } else {
-      print("Login fail");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid username or password.'),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -48,32 +63,19 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
-                    Icon(
-                      Icons.arrow_back_ios,
-                      color: Color(0xFF08248C),
-                    ),
+                    Icon(Icons.arrow_back_ios, color: Color(0xFF08248C)),
                     Text(
                       "Login",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       "EN",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
                 const SizedBox(height: 120),
-                const Icon(
-                  Icons.account_circle,
-                  size: 100,
-                  color: Color(0xFF08248C),
-                ),
+                const Icon(Icons.account_circle, size: 100, color: Color(0xFF08248C)),
                 const SizedBox(height: 40),
                 const Text(
                   "Enter your account",
@@ -91,11 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 14,
-                        offset: Offset(0, 6),
-                      ),
+                      BoxShadow(color: Colors.black12, blurRadius: 14, offset: Offset(0, 6)),
                     ],
                   ),
                   child: TextFormField(
@@ -115,11 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 14,
-                        offset: Offset(0, 6),
-                      ),
+                      BoxShadow(color: Colors.black12, blurRadius: 14, offset: Offset(0, 6)),
                     ],
                   ),
                   child: TextFormField(
@@ -137,39 +131,58 @@ class _LoginPageState extends State<LoginPage> {
                   width: 260,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: checkLogin,
+                    onPressed: _isLoading ? null : checkLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                     ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          )
+                        : const Text(
+                            "Login",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don't have an account? ",
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const RegisterPage()),
+                      ),
+                      child: const Text(
+                        "Register here",
+                        style: TextStyle(
+                          color: Color(0xFF08248C),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Color(0xFF08248C),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
                 const Text(
                   "By logging in, you agree to our Terms of Service,\nPrivacy Policy and Personal Data Protection Policy",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 13),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  "Version 1.0.0",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
+                const Text("Version 1.0.0", style: TextStyle(color: Colors.grey)),
                 const SizedBox(height: 32),
               ],
             ),
