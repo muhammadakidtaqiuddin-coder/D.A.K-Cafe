@@ -10,7 +10,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String _name = 'Admin';
-  String _email = 'admin@zuscoffee.com';
+  String _email = 'admin@dakcoffee.com';
   bool _notificationsEnabled = true;
   String _selectedLanguage = 'English';
 
@@ -267,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('ZUS Rewards', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                          Text('DAK Rewards', style: TextStyle(color: Colors.white70, fontSize: 13)),
                           SizedBox(height: 6),
                           Text('1,250 pts',
                               style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
@@ -345,12 +345,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SnackBar(content: Text('Opening Help & FAQ...'), behavior: SnackBarBehavior.floating),
                 );
               }),
-              _MenuItem(icon: Icons.info_outline, label: 'About ZUS Coffee', onTap: () {
+              _MenuItem(icon: Icons.info_outline, label: 'About DAK Coffee', onTap: () {
                 showAboutDialog(
                   context: context,
-                  applicationName: 'ZUS Coffee',
+                  applicationName: 'DAK Coffee',
                   applicationVersion: '1.0.0',
-                  applicationLegalese: '© 2024 ZUS Coffee. All rights reserved.',
+                  applicationLegalese: '© 2024 DAK Coffee. All rights reserved.',
                 );
               }),
 

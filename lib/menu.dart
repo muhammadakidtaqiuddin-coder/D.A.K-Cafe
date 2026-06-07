@@ -14,7 +14,7 @@ class _MenuPageState extends State<MenuPage> {
   final List<Map<String, dynamic>> _categories = [
     {'icon': Icons.favorite, 'title': 'For You'},
     {'icon': Icons.local_cafe_outlined, 'title': 'Matcha Series'},
-    {'icon': Icons.emoji_food_beverage_outlined, 'title': 'ZUS Tea Series'},
+    {'icon': Icons.emoji_food_beverage_outlined, 'title': 'DAK Tea Series'},
     {'icon': Icons.coffee_outlined, 'title': 'Buttercrème'},
     {'icon': Icons.coffee_maker_outlined, 'title': 'Thai Milk Tea'},
     {'icon': Icons.coffee, 'title': 'Espresso'},
@@ -34,7 +34,7 @@ class _MenuPageState extends State<MenuPage> {
       {'name': 'Iced Matcha Latte', 'price': 'RM 13.90', 'icon': Icons.local_cafe},
       {'name': 'Matcha Frappé', 'price': 'RM 15.20', 'icon': Icons.coffee_maker_outlined},
     ],
-    'ZUS Tea Series': [
+    'DAK Tea Series': [
       {'name': 'Jasmine Milk Tea', 'price': 'RM 9.90', 'icon': Icons.emoji_food_beverage_outlined},
       {'name': 'Oolong Milk Tea', 'price': 'RM 10.90', 'icon': Icons.coffee_maker},
     ],

@@ -12,9 +12,9 @@ class _MediaPageState extends State<MediaPage> {
   final List<String> _tabs = ['All', 'eGift Card', 'Promotions'];
 
   final List<Map<String, dynamic>> _giftCards = [
-    {'title': 'ZUS Gift Card RM 20', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF1E2A78), 'icon': Icons.card_giftcard, 'purchased': false},
-    {'title': 'ZUS Gift Card RM 50', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF3B4FCC), 'icon': Icons.card_giftcard_outlined, 'purchased': false},
-    {'title': 'ZUS Gift Card RM 100', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF0D1A5E), 'icon': Icons.redeem, 'purchased': false},
+    {'title': 'DAK Gift Card RM 20', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF1E2A78), 'icon': Icons.card_giftcard, 'purchased': false},
+    {'title': 'DAK Gift Card RM 50', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF3B4FCC), 'icon': Icons.card_giftcard_outlined, 'purchased': false},
+    {'title': 'DAK Gift Card RM 100', 'subtitle': 'Valid for 12 months from date of purchase', 'color': const Color(0xFF0D1A5E), 'icon': Icons.redeem, 'purchased': false},
   ];
 
   final List<Map<String, String>> _promos = [
