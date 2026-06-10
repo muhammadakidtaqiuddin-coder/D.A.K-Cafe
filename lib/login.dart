@@ -74,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 120),
-                const Icon(Icons.account_circle, size: 100, color: Color(0xFF08248C)),
-                const SizedBox(height: 40),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.10),
+                const Icon(Icons.account_circle, size: 90, color: Color(0xFF08248C)),
+                const SizedBox(height: 24),
                 const Text(
                   "Enter your account",
                   style: TextStyle(
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 32),
                 SizedBox(
-                  width: 260,
+                  width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : checkLogin,

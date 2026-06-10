@@ -231,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // ── Register Button ───────────────────────────────
                 SizedBox(
-                  width: 260,
+                  width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _register,

@@ -245,16 +245,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Icon(Icons.person, color: Colors.white, size: 36),
                     ),
                     const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_name,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF1E2A78))),
-                        const SizedBox(height: 4),
-                        Text(_email, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF1E2A78))),
+                          const SizedBox(height: 4),
+                          Text(_email,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                        ],
+                      ),
                     ),
-                    const Spacer(),
                     GestureDetector(
                       onTap: _showEditProfileDialog,
                       child: const Icon(Icons.edit_outlined, color: Color(0xFF1E2A78)),

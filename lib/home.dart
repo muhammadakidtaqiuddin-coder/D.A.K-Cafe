@@ -248,26 +248,60 @@ class _HomePageState extends State<HomePage> {
               // QUICK ACTIONS
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _QuickAction(icon: Icons.menu_book_outlined, label: 'Order', onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Go to Menu tab to order!'), behavior: SnackBarBehavior.floating),
-                      );
-                    }),
-                    _QuickAction(icon: Icons.card_giftcard_outlined, label: 'Gift Card', onTap: () {}),
-                    _QuickAction(icon: Icons.workspace_premium_outlined, label: 'Rewards', onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('You have 1,250 pts — Gold Member!'), behavior: SnackBarBehavior.floating),
-                      );
-                    }),
-                    _QuickAction(icon: Icons.history, label: 'History', onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No recent orders yet.'), behavior: SnackBarBehavior.floating),
-                      );
-                    }),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final btnSize = (constraints.maxWidth - 48) / 4;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _QuickAction(
+                          icon: Icons.menu_book_outlined,
+                          label: 'Order',
+                          btnSize: btnSize,
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Go to Menu tab to order!'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        ),
+                        _QuickAction(
+                          icon: Icons.card_giftcard_outlined,
+                          label: 'Gift Card',
+                          btnSize: btnSize,
+                          onTap: () {},
+                        ),
+                        _QuickAction(
+                          icon: Icons.workspace_premium_outlined,
+                          label: 'Rewards',
+                          btnSize: btnSize,
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('You have 1,250 pts — Gold Member!'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        ),
+                        _QuickAction(
+                          icon: Icons.history,
+                          label: 'History',
+                          btnSize: btnSize,
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('No recent orders yet.'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
 
@@ -294,18 +328,21 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(
                 height: 210,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: _drinks.length,
-                  itemBuilder: (ctx, i) {
-                    final drink = _drinks[i];
-                    final name = drink['name'] as String;
-                    final isFav = _favourites.contains(name);
-                    return GestureDetector(
-                      onTap: () => _showDrinkDetail(context, drink),
-                      child: Container(
-                        width: 140,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cardWidth = (MediaQuery.of(context).size.width * 0.37).clamp(120.0, 160.0);
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: _drinks.length,
+                      itemBuilder: (ctx, i) {
+                        final drink = _drinks[i];
+                        final name = drink['name'] as String;
+                        final isFav = _favourites.contains(name);
+                        return GestureDetector(
+                          onTap: () => _showDrinkDetail(context, drink),
+                          child: Container(
+                            width: cardWidth,
                         margin: const EdgeInsets.only(right: 14),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
@@ -355,6 +392,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     );
+                  },
+                );
                   },
                 ),
               ),
@@ -409,23 +448,26 @@ class _QuickAction extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final double btnSize;
 
-  const _QuickAction({required this.icon, required this.label, required this.onTap});
+  const _QuickAction({required this.icon, required this.label, required this.onTap, this.btnSize = 56});
 
   @override
   Widget build(BuildContext context) {
+    final size = btnSize.clamp(48.0, 68.0);
+    final iconSize = (size * 0.46).clamp(22.0, 30.0);
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
           Container(
-            width: 60,
-            height: 60,
+            width: size,
+            height: size,
             decoration: BoxDecoration(
               color: const Color(0xFFE8EBF8),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(size * 0.27),
             ),
-            child: Icon(icon, color: const Color(0xFF1E2A78), size: 28),
+            child: Icon(icon, color: const Color(0xFF1E2A78), size: iconSize),
           ),
           const SizedBox(height: 6),
           Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),

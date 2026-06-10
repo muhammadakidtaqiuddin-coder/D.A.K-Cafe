@@ -466,8 +466,9 @@ class _MenuPageState extends State<MenuPage> {
                     child: Row(
                       children: [
                         // LEFT CATEGORY MENU
-                        Container(
-                          width: 95,
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width * 0.23).clamp(72.0, 100.0),
+                          child: Container(
                           color: Colors.white,
                           child: ListView.builder(
                             itemCount: _categories.length,
@@ -496,14 +497,14 @@ class _MenuPageState extends State<MenuPage> {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 18, horizontal: 10),
+                                        vertical: 14, horizontal: 8),
                                     child: Column(
                                       children: [
                                         Icon(icon,
                                             color: active
                                                 ? const Color(0xFF1E2A78)
                                                 : Colors.grey,
-                                            size: 28),
+                                            size: 24),
                                         const SizedBox(height: 8),
                                         Text(
                                           _categories[i]['title'],
@@ -525,6 +526,7 @@ class _MenuPageState extends State<MenuPage> {
                               );
                             },
                           ),
+                        ),
                         ),
 
                         // MAIN CONTENT

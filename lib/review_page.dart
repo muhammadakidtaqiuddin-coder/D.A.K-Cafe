@@ -174,16 +174,19 @@ class _ReviewPageState extends State<ReviewPage> {
           _Label('Which drink are you reviewing?'),
           SizedBox(
             height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _drinks.length,
-              itemBuilder: (ctx, i) {
-                final active = _selectedDrinkIndex == i;
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedDrinkIndex = i),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: 90,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final cardW = (MediaQuery.of(context).size.width * 0.24).clamp(80.0, 100.0);
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _drinks.length,
+                  itemBuilder: (ctx, i) {
+                    final active = _selectedDrinkIndex == i;
+                    return GestureDetector(
+                      onTap: () => setState(() => _selectedDrinkIndex = i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: cardW,
                     margin: const EdgeInsets.only(right: 10),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -215,6 +218,8 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                   ),
                 );
+              },
+            );
               },
             ),
           ),
