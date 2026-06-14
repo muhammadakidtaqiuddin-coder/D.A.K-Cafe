@@ -36,27 +36,22 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text.trim();
     final confirm = _confirmPasswordController.text.trim();
 
-    // ── Validation ──────────────────────────────────────────────
     if (name.isEmpty || email.isEmpty || username.isEmpty || password.isEmpty) {
       _showSnack('Please fill in all fields.', Colors.redAccent);
       return;
     }
-
     if (!RegExp(r'^[\w\.\-]+@[\w\-]+\.\w+$').hasMatch(email)) {
       _showSnack('Please enter a valid email address.', Colors.redAccent);
       return;
     }
-
     if (username.length < 3) {
       _showSnack('Username must be at least 3 characters.', Colors.redAccent);
       return;
     }
-
     if (password.length < 4) {
       _showSnack('Password must be at least 4 characters.', Colors.redAccent);
       return;
     }
-
     if (password != confirm) {
       _showSnack('Passwords do not match.', Colors.redAccent);
       return;
@@ -72,11 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     final success = await DBHelper.registerUser(
-      username: username,
-      password: password,
-      name: name,
-      email: email,
-    );
+        username: username, password: password, name: name, email: email);
 
     setState(() => _isLoading = false);
 
@@ -90,13 +81,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _showSnack(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: color,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   Widget _buildField({
@@ -109,7 +98,6 @@ class _RegisterPageState extends State<RegisterPage> {
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Container(
-      height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 18),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -126,6 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: Icon(icon, color: const Color(0xFF08248C)),
           hintText: hint,
           border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 18),
           suffixIcon: onToggle != null
               ? IconButton(
                   icon: Icon(
@@ -148,149 +137,111 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-
-                // ── Top Bar ──────────────────────────────────────
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back_ios, color: Color(0xFF08248C)),
-                    ),
-                    const Text(
-                      "Register",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                    const Text(
-                      "EN",
-                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 40),
-                const Icon(Icons.person_add_alt_1, size: 90, color: Color(0xFF08248C)),
-                const SizedBox(height: 16),
-                const Text(
-                  "Create your account",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Color(0xFF08248C),
-                    fontWeight: FontWeight.bold,
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back_ios, color: Color(0xFF08248C)),
                   ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Join DAK Coffee today",
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                const SizedBox(height: 32),
-
-                // ── Fields ───────────────────────────────────────
-                _buildField(
+                  const Text("Register",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                  const Text("EN",
+                      style:
+                          TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: 32),
+              const Icon(Icons.person_add_alt_1, size: 80, color: Color(0xFF08248C)),
+              const SizedBox(height: 16),
+              const Text("Create your account",
+                  style: TextStyle(
+                      fontSize: 22, color: Color(0xFF08248C), fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              const Text("Join DAK Coffee today",
+                  style: TextStyle(color: Colors.grey, fontSize: 14)),
+              const SizedBox(height: 28),
+              _buildField(
                   controller: _nameController,
                   icon: Icons.badge_outlined,
-                  hint: "Full Name",
-                ),
-                const SizedBox(height: 16),
-                _buildField(
+                  hint: "Full Name"),
+              const SizedBox(height: 16),
+              _buildField(
                   controller: _emailController,
                   icon: Icons.email_outlined,
                   hint: "Email Address",
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16),
-                _buildField(
+                  keyboardType: TextInputType.emailAddress),
+              const SizedBox(height: 16),
+              _buildField(
                   controller: _usernameController,
                   icon: Icons.person_outline,
-                  hint: "Username",
-                ),
-                const SizedBox(height: 16),
-                _buildField(
+                  hint: "Username"),
+              const SizedBox(height: 16),
+              _buildField(
                   controller: _passwordController,
                   icon: Icons.lock_outline,
                   hint: "Password",
                   obscureToggle: _obscurePassword,
-                  onToggle: () => setState(() => _obscurePassword = !_obscurePassword),
-                ),
-                const SizedBox(height: 16),
-                _buildField(
+                  onToggle: () => setState(() => _obscurePassword = !_obscurePassword)),
+              const SizedBox(height: 16),
+              _buildField(
                   controller: _confirmPasswordController,
                   icon: Icons.lock_outline,
                   hint: "Confirm Password",
                   obscureToggle: _obscureConfirm,
-                  onToggle: () => setState(() => _obscureConfirm = !_obscureConfirm),
-                ),
-
-                const SizedBox(height: 32),
-
-                // ── Register Button ───────────────────────────────
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _register,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF08248C),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18)),
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2),
-                          )
-                        : const Text(
-                            "Register",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ),
+                  onToggle: () => setState(() => _obscureConfirm = !_obscureConfirm)),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _register,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF08248C),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                   ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        )
+                      : const Text("Register",
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                 ),
-
-                const SizedBox(height: 20),
-
-                // ── Back to Login ─────────────────────────────────
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Already have an account? ",
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Text(
-                        "Login here",
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  const Text("Already have an account? ",
+                      style: TextStyle(color: Colors.grey, fontSize: 14)),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Text("Login here",
                         style: TextStyle(
                           color: Color(0xFF08248C),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                           decorationColor: Color(0xFF08248C),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 32),
-                const Text(
-                  "By registering, you agree to our Terms of Service,\nPrivacy Policy and Personal Data Protection Policy",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 13),
-                ),
-                const SizedBox(height: 32),
-              ],
-            ),
+                        )),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              const Text(
+                "By registering, you agree to our Terms of Service,\nPrivacy Policy and Personal Data Protection Policy",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+              const SizedBox(height: 32),
+            ],
           ),
         ),
       ),

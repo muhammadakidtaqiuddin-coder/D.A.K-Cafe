@@ -26,14 +26,7 @@ class _ReviewPageState extends State<ReviewPage> {
     {'name': 'Jasmine Milk Tea', 'icon': Icons.emoji_food_beverage_outlined},
   ];
 
-  final List<String> _ratingLabels = [
-    '',
-    'Poor',
-    'Fair',
-    'Good',
-    'Great',
-    'Excellent!',
-  ];
+  final List<String> _ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent!'];
 
   @override
   void dispose() {
@@ -44,35 +37,15 @@ class _ReviewPageState extends State<ReviewPage> {
 
   Future<void> _submit() async {
     if (_rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a star rating.'),
-          backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _snack('Please select a star rating.');
       return;
     }
-
     if (_nameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your name.'),
-          backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _snack('Please enter your name.');
       return;
     }
-
     if (_reviewController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please write a short review.'),
-          backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _snack('Please write a short review.');
       return;
     }
 
@@ -103,6 +76,14 @@ class _ReviewPageState extends State<ReviewPage> {
     });
   }
 
+  void _snack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+      backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,25 +91,18 @@ class _ReviewPageState extends State<ReviewPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // HEADER
             Container(
               color: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: const Center(
                 child: Text(
                   'Leave a Review',
                   style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E2A78)),
+                      fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78)),
                 ),
               ),
             ),
-
-            Expanded(
-              child: _submitted ? _buildSuccess() : _buildForm(),
-            ),
+            Expanded(child: _submitted ? _buildSuccess() : _buildForm()),
           ],
         ),
       ),
@@ -144,18 +118,13 @@ class _ReviewPageState extends State<ReviewPage> {
             width: 90,
             height: 90,
             decoration: BoxDecoration(
-              color: const Color(0xFFE8F5E9),
-              borderRadius: BorderRadius.circular(45),
-            ),
-            child: const Icon(Icons.favorite_rounded,
-                color: Colors.green, size: 52),
+                color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(45)),
+            child: const Icon(Icons.favorite_rounded, color: Colors.green, size: 52),
           ),
           const SizedBox(height: 20),
           const Text('Thank you!',
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E2A78))),
+                  fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78))),
           const SizedBox(height: 8),
           const Text('Your review has been submitted.',
               style: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -165,43 +134,40 @@ class _ReviewPageState extends State<ReviewPage> {
   }
 
   Widget _buildForm() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    // Drink card width: ~22% of screen, min 76, max 96
+    final cardW = (screenWidth * 0.22).clamp(76.0, 96.0);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // DRINK PICKER
-          _Label('Which drink are you reviewing?'),
+          const _Label('Which drink are you reviewing?'),
           SizedBox(
             height: 100,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final cardW = (MediaQuery.of(context).size.width * 0.24).clamp(80.0, 100.0);
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _drinks.length,
-                  itemBuilder: (ctx, i) {
-                    final active = _selectedDrinkIndex == i;
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedDrinkIndex = i),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: cardW,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _drinks.length,
+              itemBuilder: (ctx, i) {
+                final active = _selectedDrinkIndex == i;
+                return GestureDetector(
+                  onTap: () => setState(() => _selectedDrinkIndex = i),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: cardW,
                     margin: const EdgeInsets.only(right: 10),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color:
-                          active ? const Color(0xFF1E2A78) : Colors.white,
+                      color: active ? const Color(0xFF1E2A78) : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(_drinks[i]['icon'] as IconData,
-                            size: 28,
-                            color: active
-                                ? Colors.white
-                                : const Color(0xFF1E2A78)),
+                            size: 26,
+                            color: active ? Colors.white : const Color(0xFF1E2A78)),
                         const SizedBox(height: 6),
                         Text(
                           _drinks[i]['name'] as String,
@@ -219,50 +185,41 @@ class _ReviewPageState extends State<ReviewPage> {
                   ),
                 );
               },
-            );
-              },
             ),
           ),
-
           const SizedBox(height: 24),
-
-          // STAR RATING
-          _Label('How would you rate it?'),
+          const _Label('How would you rate it?'),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18)),
+            decoration:
+                BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(5, (i) {
-                    final starIndex = i + 1;
-                    final filled = starIndex <=
-                        (_hoverRating > 0 ? _hoverRating : _rating);
-                    return GestureDetector(
-                      onTap: () => setState(() => _rating = starIndex),
-                      onTapDown: (_) =>
-                          setState(() => _hoverRating = starIndex),
-                      onTapCancel: () => setState(() => _hoverRating = 0),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                // Stars scale with screen width
+                LayoutBuilder(builder: (ctx, constraints) {
+                  final starSize = (constraints.maxWidth / 5 * 0.6).clamp(32.0, 48.0);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(5, (i) {
+                      final starIndex = i + 1;
+                      final filled = starIndex <= (_hoverRating > 0 ? _hoverRating : _rating);
+                      return GestureDetector(
+                        onTap: () => setState(() => _rating = starIndex),
+                        onTapDown: (_) => setState(() => _hoverRating = starIndex),
+                        onTapCancel: () => setState(() => _hoverRating = 0),
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 150),
                           child: Icon(
                             filled ? Icons.star_rounded : Icons.star_outline_rounded,
                             key: ValueKey('$starIndex-$filled'),
-                            size: 44,
-                            color: filled
-                                ? const Color(0xFFFFB800)
-                                : Colors.grey.shade300,
+                            size: starSize,
+                            color: filled ? const Color(0xFFFFB800) : Colors.grey.shade300,
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                ),
+                      );
+                    }),
+                  );
+                }),
                 const SizedBox(height: 10),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
@@ -270,9 +227,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     _rating > 0 ? _ratingLabels[_rating] : 'Tap a star to rate',
                     key: ValueKey(_rating),
                     style: TextStyle(
-                      color: _rating > 0
-                          ? const Color(0xFF1E2A78)
-                          : Colors.grey,
+                      color: _rating > 0 ? const Color(0xFF1E2A78) : Colors.grey,
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
                     ),
@@ -281,45 +236,35 @@ class _ReviewPageState extends State<ReviewPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // NAME
-          _Label('Your Name'),
+          const _Label('Your Name'),
           _FormField(
             controller: _nameController,
             hint: 'e.g. Ahmad Farid',
             icon: Icons.person_outline,
           ),
-
           const SizedBox(height: 16),
-
-          // COMMENT
-          _Label('Your Review'),
+          const _Label('Your Review'),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: const [
-                BoxShadow(
-                    color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
+                BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
               ],
             ),
             child: TextField(
               controller: _reviewController,
               maxLines: 4,
               decoration: const InputDecoration(
-                hintText:
-                    'Tell us what you think about this drink...',
+                hintText: 'Tell us what you think about this drink...',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.grey),
               ),
             ),
           ),
-
           const SizedBox(height: 28),
-
           SizedBox(
             width: double.infinity,
             height: 56,
@@ -328,22 +273,18 @@ class _ReviewPageState extends State<ReviewPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1E2A78),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
               ),
               child: _isSubmitting
                   ? const SizedBox(
                       width: 24,
                       height: 24,
-                      child: CircularProgressIndicator(
-                          color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                     )
                   : const Text('Submit Review',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ),
-
           const SizedBox(height: 32),
         ],
       ),
@@ -361,9 +302,7 @@ class _Label extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(text,
           style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: Color(0xFF1E2A78))),
+              fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1E2A78))),
     );
   }
 }
@@ -373,8 +312,7 @@ class _FormField extends StatelessWidget {
   final String hint;
   final IconData icon;
 
-  const _FormField(
-      {required this.controller, required this.hint, required this.icon});
+  const _FormField({required this.controller, required this.hint, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -384,8 +322,7 @@ class _FormField extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
-          BoxShadow(
-              color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
         ],
       ),
       child: TextField(
@@ -395,6 +332,7 @@ class _FormField extends StatelessWidget {
           hintText: hint,
           border: InputBorder.none,
           hintStyle: const TextStyle(color: Colors.grey),
+          contentPadding: const EdgeInsets.symmetric(vertical: 14),
         ),
       ),
     );

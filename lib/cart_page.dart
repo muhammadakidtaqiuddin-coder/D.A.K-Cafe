@@ -54,7 +54,6 @@ class _CartPageState extends State<CartPage> {
 
     setState(() => _isSubmitting = true);
 
-    // Save each cart item as a separate order row
     for (final item in cart.items) {
       await DBHelper.insertOrder(
         drinkName: item.name,
@@ -94,21 +93,17 @@ class _CartPageState extends State<CartPage> {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: const Color(0xFFE8F5E9),
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: const Icon(Icons.check_circle_rounded,
-                  color: Colors.green, size: 52),
+                  color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(40)),
+              child: const Icon(Icons.check_circle_rounded, color: Colors.green, size: 52),
             ),
             const SizedBox(height: 20),
             const Text('Order Placed!',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E2A78))),
+                    fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78))),
             const SizedBox(height: 10),
             Text(
               '$itemCount item${itemCount > 1 ? 's' : ''} · $totalStr',
+              textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
             const SizedBox(height: 6),
@@ -122,13 +117,11 @@ class _CartPageState extends State<CartPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E2A78),
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: const Text('Done',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -161,15 +154,10 @@ class _CartPageState extends State<CartPage> {
             children: [
               Text(item.name,
                   style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E2A78))),
+                      fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78))),
               const SizedBox(height: 20),
-
-              // Size
               const Text('Size',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
               const SizedBox(height: 8),
               Row(
                 children: ['Small', 'Medium', 'Large'].map((s) {
@@ -182,9 +170,7 @@ class _CartPageState extends State<CartPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
-                          color: active
-                              ? const Color(0xFF1E2A78)
-                              : const Color(0xFFF0F2FB),
+                          color: active ? const Color(0xFF1E2A78) : const Color(0xFFF0F2FB),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(s,
@@ -198,13 +184,9 @@ class _CartPageState extends State<CartPage> {
                   );
                 }).toList(),
               ),
-
               const SizedBox(height: 16),
-
-              // Temp
               const Text('Temperature',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
               const SizedBox(height: 8),
               Row(
                 children: ['Hot', 'Iced'].map((t) {
@@ -217,21 +199,16 @@ class _CartPageState extends State<CartPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
-                          color: active
-                              ? const Color(0xFF1E2A78)
-                              : const Color(0xFFF0F2FB),
+                          color: active ? const Color(0xFF1E2A78) : const Color(0xFFF0F2FB),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              t == 'Hot'
-                                  ? Icons.local_fire_department
-                                  : Icons.ac_unit,
+                              t == 'Hot' ? Icons.local_fire_department : Icons.ac_unit,
                               size: 16,
-                              color:
-                                  active ? Colors.white : const Color(0xFF1E2A78),
+                              color: active ? Colors.white : const Color(0xFF1E2A78),
                             ),
                             const SizedBox(width: 4),
                             Text(t,
@@ -246,13 +223,9 @@ class _CartPageState extends State<CartPage> {
                   );
                 }).toList(),
               ),
-
               const SizedBox(height: 16),
-
-              // Sugar
               Text('Sugar Level: ${sugar.toInt()}%',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1E2A78))),
               Slider(
                 value: sugar,
                 min: 0,
@@ -262,13 +235,11 @@ class _CartPageState extends State<CartPage> {
                 label: '${sugar.toInt()}%',
                 onChanged: (v) => setSheet(() => sugar = v),
               ),
-
               const SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Apply changes — remove and re-add with new config
                     final updated = CartItem(
                       productId: item.productId,
                       name: item.name,
@@ -286,13 +257,11 @@ class _CartPageState extends State<CartPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E2A78),
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: const Text('Save Changes',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -330,8 +299,7 @@ class _CartPageState extends State<CartPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             title: const Text('Clear Cart'),
-                            content: const Text(
-                                'Remove all items from your cart?'),
+                            content: const Text('Remove all items from your cart?'),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(ctx),
@@ -356,7 +324,7 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
 
-              // CART ITEMS
+              // CONTENT
               Expanded(
                 child: cart.items.isEmpty
                     ? Center(
@@ -364,8 +332,7 @@ class _CartPageState extends State<CartPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.shopping_cart_outlined,
-                                size: 80,
-                                color: Colors.grey.shade300),
+                                size: 80, color: Colors.grey.shade300),
                             const SizedBox(height: 16),
                             const Text('Your cart is empty',
                                 style: TextStyle(
@@ -374,90 +341,81 @@ class _CartPageState extends State<CartPage> {
                                     fontWeight: FontWeight.w500)),
                             const SizedBox(height: 8),
                             const Text('Add drinks from the Menu tab',
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 13)),
+                                style: TextStyle(color: Colors.grey, fontSize: 13)),
                           ],
                         ),
                       )
                     : ListView(
                         padding: const EdgeInsets.all(16),
                         children: [
-                          // CART ITEMS LIST
+                          // CART ITEMS
                           ...cart.items.asMap().entries.map((entry) {
                             final i = entry.key;
                             final item = entry.value;
                             return Container(
                               margin: const EdgeInsets.only(bottom: 12),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(18),
-                              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18)),
                               child: Padding(
-                                padding: const EdgeInsets.all(14),
+                                padding: const EdgeInsets.all(12),
                                 child: Row(
                                   children: [
                                     // Icon
                                     Container(
-                                      width: 56,
-                                      height: 56,
+                                      width: 50,
+                                      height: 50,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFF0F2FB),
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
+                                          color: const Color(0xFFF0F2FB),
+                                          borderRadius: BorderRadius.circular(12)),
                                       child: Icon(item.icon,
-                                          color: const Color(0xFF1E2A78),
-                                          size: 30),
+                                          color: const Color(0xFF1E2A78), size: 28),
                                     ),
-                                    const SizedBox(width: 12),
-
-                                    // Info
+                                    const SizedBox(width: 10),
+                                    // Info — flex so it never overflows
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(item.name,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
+                                                  fontSize: 13,
                                                   color: Color(0xFF1E2A78))),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 3),
                                           Text(
                                             '${item.size} · ${item.temperature} · Sugar ${item.sugarLevel}%',
                                             style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12),
+                                                color: Colors.grey, fontSize: 11),
                                           ),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 3),
                                           GestureDetector(
-                                            onTap: () =>
-                                                _showCustomiseSheet(cart, i),
+                                            onTap: () => _showCustomiseSheet(cart, i),
                                             child: const Text('Customise',
                                                 style: TextStyle(
                                                     color: Color(0xFF3B4FCC),
                                                     fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w600,
-                                                    decoration: TextDecoration
-                                                        .underline)),
+                                                    fontWeight: FontWeight.w600,
+                                                    decoration: TextDecoration.underline)),
                                           ),
                                         ],
                                       ),
                                     ),
-
-                                    // Qty controls + price
+                                    const SizedBox(width: 6),
+                                    // Price + qty
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Text(
                                           'RM ${item.subtotal.toStringAsFixed(2)}',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Color(0xFF1E2A78),
-                                              fontSize: 14),
+                                              fontSize: 13),
                                         ),
-                                        const SizedBox(height: 8),
+                                        const SizedBox(height: 6),
                                         Row(
                                           children: [
                                             _QtyButton(
@@ -470,14 +428,12 @@ class _CartPageState extends State<CartPage> {
                                               onTap: () => cart.decrement(i),
                                             ),
                                             SizedBox(
-                                              width: 32,
-                                              child: Text(
-                                                '${item.quantity}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              ),
+                                              width: 28,
+                                              child: Text('${item.quantity}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 14)),
                                             ),
                                             _QtyButton(
                                               icon: Icons.add,
@@ -512,24 +468,21 @@ class _CartPageState extends State<CartPage> {
                                         color: Color(0xFF1E2A78))),
                                 const SizedBox(height: 14),
                                 _DetailField(
-                                  controller: _nameController,
-                                  hint: 'Full Name',
-                                  icon: Icons.person_outline,
-                                ),
+                                    controller: _nameController,
+                                    hint: 'Full Name',
+                                    icon: Icons.person_outline),
                                 const SizedBox(height: 10),
                                 _DetailField(
-                                  controller: _phoneController,
-                                  hint: 'Phone Number',
-                                  icon: Icons.phone_outlined,
-                                  keyboardType: TextInputType.phone,
-                                ),
+                                    controller: _phoneController,
+                                    hint: 'Phone Number',
+                                    icon: Icons.phone_outlined,
+                                    keyboardType: TextInputType.phone),
                                 const SizedBox(height: 10),
                                 _DetailField(
-                                  controller: _notesController,
-                                  hint: 'Special notes (optional)',
-                                  icon: Icons.notes_outlined,
-                                  maxLines: 2,
-                                ),
+                                    controller: _notesController,
+                                    hint: 'Special notes (optional)',
+                                    icon: Icons.notes_outlined,
+                                    maxLines: 2),
                               ],
                             ),
                           ),
@@ -545,19 +498,16 @@ class _CartPageState extends State<CartPage> {
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Subtotal',
                                         style: TextStyle(color: Colors.grey)),
-                                    Text(
-                                        'RM ${cart.subtotal.toStringAsFixed(2)}'),
+                                    Text('RM ${cart.subtotal.toStringAsFixed(2)}'),
                                   ],
                                 ),
                                 const SizedBox(height: 8),
                                 const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('Service Fee',
                                         style: TextStyle(color: Colors.grey)),
@@ -566,13 +516,11 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 const Divider(height: 20),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('Total',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16)),
+                                            fontWeight: FontWeight.bold, fontSize: 16)),
                                     Text(
                                       'RM ${cart.total.toStringAsFixed(2)}',
                                       style: const TextStyle(
@@ -593,9 +541,7 @@ class _CartPageState extends State<CartPage> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: _isSubmitting
-                                  ? null
-                                  : () => _checkout(cart),
+                              onPressed: _isSubmitting ? null : () => _checkout(cart),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF1E2A78),
                                 foregroundColor: Colors.white,
@@ -612,8 +558,7 @@ class _CartPageState extends State<CartPage> {
                                   : Text(
                                       'Place Order · RM ${cart.total.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                                          fontSize: 15, fontWeight: FontWeight.bold),
                                     ),
                             ),
                           ),
@@ -633,8 +578,7 @@ class _QtyButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
-  const _QtyButton(
-      {required this.icon, required this.color, required this.onTap});
+  const _QtyButton({required this.icon, required this.color, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -644,9 +588,7 @@ class _QtyButton extends StatelessWidget {
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
+            color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
         child: Icon(icon, size: 16, color: color),
       ),
     );
@@ -673,9 +615,7 @@ class _DetailField extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F7F7),
-        borderRadius: BorderRadius.circular(12),
-      ),
+          color: const Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(12)),
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
@@ -685,6 +625,7 @@ class _DetailField extends StatelessWidget {
           hintText: hint,
           border: InputBorder.none,
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
         ),
       ),
     );

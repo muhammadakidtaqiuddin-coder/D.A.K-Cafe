@@ -39,11 +39,17 @@ class _HomePageState extends State<HomePage> {
   void _showDrinkDetail(BuildContext context, Map<String, dynamic> drink) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 24,
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -59,6 +65,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
             Text(
               (drink['name'] as String).replaceAll('\n', ' '),
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78)),
             ),
             const SizedBox(height: 8),
@@ -96,6 +103,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Responsive banner height: taller on large screens, shorter on small
+    final bannerHeight = (screenHeight * 0.20).clamp(130.0, 180.0);
+    // Responsive card width for horizontal list
+    final cardWidth = (screenWidth * 0.37).clamp(120.0, 160.0);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       body: SafeArea(
@@ -115,16 +129,21 @@ class _HomePageState extends State<HomePage> {
                       child: Icon(Icons.person, color: Colors.white),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Good Morning,', style: TextStyle(color: Colors.grey, fontSize: 13)),
-                        Text('Admin',
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Good Morning,', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                          Text(
+                            'Admin',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF1E2A78))),
-                      ],
+                                fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF1E2A78)),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
                         setState(() => _hasNotification = false);
@@ -186,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                         duration: const Duration(milliseconds: 350),
                         child: Container(
                           key: ValueKey(_bannerIndex),
-                          height: 160,
+                          height: bannerHeight,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -200,7 +219,8 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Positioned(
                                 left: 20,
-                                top: 30,
+                                top: 24,
+                                right: 80,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -209,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                                     const SizedBox(height: 6),
                                     Text(_banners[_bannerIndex]['name']!,
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                                            color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
                                     const SizedBox(height: 10),
                                     Text(_banners[_bannerIndex]['price']!,
                                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
@@ -217,10 +237,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Positioned(
-                                right: 16,
+                                right: 12,
                                 bottom: 0,
                                 child: Icon(Icons.local_cafe,
-                                    size: 100, color: Colors.white.withOpacity(0.2)),
+                                    size: 90, color: Colors.white.withOpacity(0.2)),
                               ),
                             ],
                           ),
@@ -230,78 +250,68 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(_banners.length, (i) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: _bannerIndex == i ? 20 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: _bannerIndex == i ? const Color(0xFF1E2A78) : Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(4),
+                      children: List.generate(
+                        _banners.length,
+                        (i) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: _bannerIndex == i ? 20 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: _bannerIndex == i ? const Color(0xFF1E2A78) : Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
-                      )),
+                      ),
                     ),
                   ],
                 ),
               ),
 
-              // QUICK ACTIONS
+              // QUICK ACTIONS — evenly spaced, icon size responsive
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final btnSize = (constraints.maxWidth - 48) / 4;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _QuickAction(
-                          icon: Icons.menu_book_outlined,
-                          label: 'Order',
-                          btnSize: btnSize,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Go to Menu tab to order!'),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          },
-                        ),
-                        _QuickAction(
-                          icon: Icons.card_giftcard_outlined,
-                          label: 'Gift Card',
-                          btnSize: btnSize,
-                          onTap: () {},
-                        ),
-                        _QuickAction(
-                          icon: Icons.workspace_premium_outlined,
-                          label: 'Rewards',
-                          btnSize: btnSize,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('You have 1,250 pts — Gold Member!'),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          },
-                        ),
-                        _QuickAction(
-                          icon: Icons.history,
-                          label: 'History',
-                          btnSize: btnSize,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('No recent orders yet.'),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _QuickAction(
+                      icon: Icons.menu_book_outlined,
+                      label: 'Order',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Go to Menu tab to order!'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                    _QuickAction(icon: Icons.card_giftcard_outlined, label: 'Gift Card', onTap: () {}),
+                    _QuickAction(
+                      icon: Icons.workspace_premium_outlined,
+                      label: 'Rewards',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('You have 1,250 pts — Gold Member!'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                    _QuickAction(
+                      icon: Icons.history,
+                      label: 'History',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('No recent orders yet.'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
 
@@ -328,21 +338,18 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(
                 height: 210,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final cardWidth = (MediaQuery.of(context).size.width * 0.37).clamp(120.0, 160.0);
-                    return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: _drinks.length,
-                      itemBuilder: (ctx, i) {
-                        final drink = _drinks[i];
-                        final name = drink['name'] as String;
-                        final isFav = _favourites.contains(name);
-                        return GestureDetector(
-                          onTap: () => _showDrinkDetail(context, drink),
-                          child: Container(
-                            width: cardWidth,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: _drinks.length,
+                  itemBuilder: (ctx, i) {
+                    final drink = _drinks[i];
+                    final name = drink['name'] as String;
+                    final isFav = _favourites.contains(name);
+                    return GestureDetector(
+                      onTap: () => _showDrinkDetail(context, drink),
+                      child: Container(
+                        width: cardWidth,
                         margin: const EdgeInsets.only(right: 14),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
@@ -393,17 +400,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   },
-                );
-                  },
                 ),
               ),
 
               const SizedBox(height: 24),
 
               // PROMO SECTION
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: const Text('Promotions',
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Promotions',
                     style: TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1E2A78))),
               ),
@@ -420,17 +425,17 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   child: Container(
-                    height: 100,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: const Color(0xFFE8EBF8),
                     ),
-                    child: const Center(
-                      child: Text(
-                        '🎉  Buy 2 Free 1 every Wednesday!',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Color(0xFF1E2A78), fontSize: 15),
-                      ),
+                    child: const Text(
+                      '🎉  Buy 2 Free 1 every Wednesday!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, color: Color(0xFF1E2A78), fontSize: 15),
                     ),
                   ),
                 ),
@@ -448,14 +453,17 @@ class _QuickAction extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  final double btnSize;
 
-  const _QuickAction({required this.icon, required this.label, required this.onTap, this.btnSize = 56});
+  const _QuickAction({required this.icon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final size = btnSize.clamp(48.0, 68.0);
-    final iconSize = (size * 0.46).clamp(22.0, 30.0);
+    // Derive size from screen width so it fits any phone
+    final screenWidth = MediaQuery.of(context).size.width;
+    final size = ((screenWidth - 64) / 4).clamp(48.0, 68.0);
+    final iconSize = (size * 0.44).clamp(20.0, 28.0);
+    final fontSize = screenWidth < 360 ? 10.0 : 12.0;
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -470,7 +478,9 @@ class _QuickAction extends StatelessWidget {
             child: Icon(icon, color: const Color(0xFF1E2A78), size: iconSize),
           ),
           const SizedBox(height: 6),
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+          Text(label,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w500)),
         ],
       ),
     );
