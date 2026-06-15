@@ -234,6 +234,23 @@ class DBHelper {
     }
   }
 
+  // ─── GENERIC CRUD ──────────────────────────────────────────────
+
+  static Future<int> insertRow(String table, Map<String, dynamic> data) async {
+    final db = await database;
+    return await db.insert(table, data);
+  }
+
+  static Future<int> updateRow(String table, int id, Map<String, dynamic> data) async {
+    final db = await database;
+    return await db.update(table, data, where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> deleteRow(String table, int id) async {
+    final db = await database;
+    return await db.delete(table, where: 'id = ?', whereArgs: [id]);
+  }
+
   // ─── USER METHODS ──────────────────────────────────────────────
 
   static Future<bool> registerUser({
@@ -252,7 +269,7 @@ class DBHelper {
       });
       return true;
     } catch (_) {
-      return false; // username already exists (UNIQUE constraint)
+      return false;
     }
   }
 
